@@ -1,29 +1,16 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.*;
-import java.net.Socket;
 import java.io.*;
 
 import java.net.*;
 
+import java.util.*;
+
 import javax.swing.*;
+
+import javax.swing.border.*;
 
 import java.awt.*;
 
 import java.awt.event.*;
-
-//--------------------------------------------------------------//
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-
-//--------------------------------------------------------------//
-
-
 
 
 //--------------------------------------------------------------//
@@ -48,40 +35,40 @@ import javax.swing.JFrame;
 
 //--------------------------------------------------------------//
 
-    public class democlient03 extends JFrame implements ActionListener {
+    public class democlient04 extends JFrame implements ActionListener{
 
         //宣告區
 
         //設定名子及ip
 
-        String name, ip = "";
+        String    name,ip="";
 
-        BufferedReader reader;
+        BufferedReader  reader;
 
-        PrintStream writer;
+        PrintStream  writer;
 
         //建立Socket變數
 
-        Socket sock;
+        Socket    sock;
 
-        //聊天顯示區域
+        //顯示區域
 
-        JTextArea incoming = new JTextArea(15, 50);
+        JTextArea   incoming = new JTextArea(15,50);
 
         //輸入區域
 
-        JTextField outgoing = new JTextField(20);
+        JTextField   outgoing = new JTextField(20);
 
-        JLabel jlmane = new JLabel("你的名字：");
+        JLabel    jlmane   = new JLabel("你的名字：");
 
-        JLabel jlip = new JLabel("輸入ip：");
+        JLabel    jlip  = new JLabel("輸入ip：");
 
-        JTextField jfmane = new JTextField("無名", 10);
+        JTextField   jfmane   = new JTextField("無名",10);
 
-        JTextField jfip = new JTextField("127.0.0.1", 10);
+        JTextField   jfip   = new JTextField("127.0.0.1",10);
 
+        JLabel    state  = new JLabel("請輸入你的名字及你的名字");
 
-        JLabel state = new JLabel("請輸入你的名字");
 
 
         MenuBar mBar = new MenuBar();
@@ -92,9 +79,7 @@ import javax.swing.JFrame;
 
         //Save
 
-        MenuItem mFileSave = new MenuItem("儲存檔案");
-
-
+        MenuItem mFileSave=new MenuItem("儲存檔案");
 
         //--------------------------------------------------------------//
 
@@ -102,11 +87,9 @@ import javax.swing.JFrame;
 
         //--------------------------------------------------------------//
 
-        public static void main(String[] args) {
+        public static void main(String[] args){
 
-            democlient03 client = new democlient03();       //
-//        DEMO003 demo003 = new DEMO003();
-
+            democlient04 client = new democlient04();       //
 
         }
 
@@ -116,17 +99,17 @@ import javax.swing.JFrame;
 
         //--------------------------------------------------------------//
 
-        void democlient03() {
+        democlient04 (){
 
             //設定及宣告視窗物件
 
             //建立視窗JFrame
 
-            setTitle("Bingo for everyone!!!!");
+            super("多入連線Client端");
 
             //用來放mane及ip--設定區域
 
-            JPanel maneipPanel = new JPanel();
+            JPanel maneipPanel  = new JPanel();
 
             //建來設定按鍵
 
@@ -144,6 +127,7 @@ import javax.swing.JFrame;
 
             maneipPanel.add(jfmane);
 
+            maneipPanel.add(jlip);
 
             //位子
 
@@ -155,7 +139,7 @@ import javax.swing.JFrame;
 
             //排版BorderLayout設定區域在上方----
 
-            getContentPane().add(BorderLayout.NORTH, maneipPanel);
+            getContentPane().add(BorderLayout.NORTH,maneipPanel);
 
             //JButton("送出")
 
@@ -164,6 +148,7 @@ import javax.swing.JFrame;
             //按下
 
             sendButton.addActionListener(this);
+
             //對話區域-----
 
             //設置為 true，則當行的長度大於所分派的寬度時，將換行
@@ -204,7 +189,8 @@ import javax.swing.JFrame;
 
             //對話區域在中間------
 
-            getContentPane().add(BorderLayout.CENTER, mainPanel);
+            getContentPane().add(BorderLayout.CENTER,mainPanel);
+
 
 
             //Menu事件
@@ -225,19 +211,19 @@ import javax.swing.JFrame;
 
             //狀態區域在下方----
 
-            getContentPane().add(BorderLayout.SOUTH, state);
+            getContentPane().add(BorderLayout.SOUTH,state);
 
-            //設置初始介面大小
-
-            setSize(1100, 950);
+            setSize(600,450);
 
             setVisible(true);
 
             //離開
 
-            addWindowListener(new WindowAdapter() {
+            addWindowListener(new WindowAdapter()
 
-                public void windowClosing(WindowEvent e) {
+            {
+
+                public void windowClosing(WindowEvent e){
 
                     System.out.println("離開聊天室");
 
@@ -246,11 +232,6 @@ import javax.swing.JFrame;
                 }
 
             });
-
-//-----------------------------------------------------------------
-
-
-//-----------------------------------------------------------------
 
         }
 
@@ -262,13 +243,13 @@ import javax.swing.JFrame;
 
         //--------------------------------------------------------------//
 
-        private void EstablishConnection() {
+        private void EstablishConnection(){
 
-            try {
+            try{
 
                 //請求建立連線
 
-                sock = new Socket(ip, 8888);
+                sock = new Socket(ip,8888);
 
                 //建立I/O資料流
 
@@ -285,6 +266,7 @@ import javax.swing.JFrame;
                 //取得Socket的輸出資料流
 
 
+
                 writer = new PrintStream(sock.getOutputStream());
 
                 //連線成功
@@ -294,7 +276,8 @@ import javax.swing.JFrame;
                 System.out.println("網路建立-連線成功");
 
 
-            } catch (IOException ex) {
+
+            }catch(IOException ex ){
 
                 System.out.println("建立連線失敗");
 
@@ -308,23 +291,21 @@ import javax.swing.JFrame;
 
         //--------------------------------------------------------------//
 
-        public class IncomingReader implements Runnable {
+        public class IncomingReader implements Runnable{
 
-            public void run() {
+            public void run(){
 
                 String message;
 
-                try {
+                try{
 
-                    while ((message = reader.readLine()) != null) {
+                    while ((message = reader.readLine()) != null){
 
-                        incoming.append(message + '\n');
+                        incoming.append(message+'\n');
 
                     }
 
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+                }catch(Exception ex ){ex.printStackTrace();}
 
             }
 
@@ -336,13 +317,13 @@ import javax.swing.JFrame;
 
         //--------------------------------------------------------------//
 
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e){
 
-            String str = e.getActionCommand();
+            String str=e.getActionCommand();
 
             //按下設定
 
-            if (str.equals("連線設定")) {
+            if(str.equals("連線設定")){
 
                 //設定名字
 
@@ -350,11 +331,11 @@ import javax.swing.JFrame;
 
                 //設定ip，此程式目前無作用
 
-                ip = jfip.getText();
+                ip  = jfip.getText();
 
                 //狀態
 
-                state.setText("設定" + name + ":" + ip);
+                state.setText("設定"+name+":"+ip);
 
                 //建立連線----
 
@@ -368,21 +349,23 @@ import javax.swing.JFrame;
 
                 //按下送出
 
-            } else if (str.equals("送出")) {
+            }else if(str.equals("送出")){
 
                 //不可沒有ip及送出空白
 
-                if ((ip != null) && (outgoing.getText() != "")) {
+                if((ip!=null)&&(outgoing.getText()!=""))
 
-                    try {//送出資料
+                {
 
-                        writer.println((name + ":" + outgoing.getText()));
+                    try{//送出資料
+
+                        writer.println((name+":"+outgoing.getText()));
 
                         //刷新該串流的緩衝。
 
                         writer.flush();
 
-                    } catch (Exception ex) {
+                    }catch(Exception ex ){
 
                         System.out.println("送出資料失敗");
 
@@ -394,11 +377,13 @@ import javax.swing.JFrame;
 
                 }
 
-            } else if (str.equals("儲存檔案")) {
+            }else if (str.equals("儲存檔案"))
 
-                try {
+            {
 
-                    FileWriter f =
+                try{
+
+                    FileWriter f=
 
                             new FileWriter("log.txt");
 
@@ -408,7 +393,7 @@ import javax.swing.JFrame;
 
                     state.setText("儲存檔案成功");
 
-                } catch (IOException e2) {
+                }catch (IOException e2){
 
                     state.setText("儲存檔案失敗");
 
@@ -419,6 +404,3 @@ import javax.swing.JFrame;
         }
 
     }
-
-//----------------------------------------------------------
-
